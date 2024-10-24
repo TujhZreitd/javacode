@@ -15,13 +15,13 @@ public class SimpleConcurrentBank implements ConcurrentBank {
     }
 
     @Override
-    public synchronized void transfer(BankAccount bankAccount1, BankAccount bankAccount2, int amount) {
+    public void transfer(BankAccount bankAccount1, BankAccount bankAccount2, int amount) {
         bankAccount1.withdraw(amount);
         bankAccount2.deposit(amount);
     }
 
     @Override
-    public synchronized int getTotalBalance() {
+    public int getTotalBalance() {
         int result = 0;
         for (Map.Entry<Integer, BankAccount> entry : bankAccounts.entrySet()) {
             result += entry.getValue().getBalance();
