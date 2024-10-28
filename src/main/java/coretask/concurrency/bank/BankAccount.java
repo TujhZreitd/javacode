@@ -1,8 +1,12 @@
 package coretask.concurrency.bank;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class BankAccount {
-    private int id;
+    private final int id;
     private int balance;
+    private final Lock lock = new ReentrantLock();
 
     public BankAccount(int id, int balance) {
         this.id = id;
@@ -17,11 +21,26 @@ public class BankAccount {
         return balance;
     }
 
-    public synchronized void deposit(int amount) {
-        balance += amount;
+    public Lock getLock() {
+        return lock;
     }
 
-    public synchronized void withdraw(int amount) {
-        balance -= amount;
+    public void deposit(int amount) {
+        lock.lock();
+        try {
+            balance += amount;
+        } finally {
+            lock.unlock();
+        }
+
+    }
+
+    public void withdraw(int amount) {
+        lock.lock();
+        try {
+            balance -= amount;
+        } finally {
+            lock.unlock();
+        }
     }
 }
